@@ -1,0 +1,97 @@
+{
+  "student": {
+    "name": "Ayush",
+    "subject": "DBMS",
+    "examName": "Mid Exam",
+    "examDate": "2026-08-01",
+    "hoursPerDay": 1
+  },
+  "plan": [
+    {
+      "day": 1,
+      "date": "2026-07-24",
+      "topics": [
+        "Introduction to DBMS",
+        "DBMS Architecture"
+      ],
+      "goal": "Understand DBMS basics"
+    },
+    {
+      "day": 2,
+      "date": "2026-07-25",
+      "topics": [
+        "Data Models",
+        "ER Diagrams"
+      ],
+      "goal": "Learn data modeling concepts"
+    },
+    {
+      "day": 3,
+      "date": "2026-07-26",
+      "topics": [
+        "Relational Data Model",
+        "Normalization"
+      ],
+      "goal": "Master relational data model"
+    },
+    {
+      "day": 4,
+      "date": "2026-07-27",
+      "topics": [
+        "SQL Basics",
+        "Query Optimization"
+      ],
+      "goal": "Understand SQL fundamentals"
+    },
+    {
+      "day": 5,
+      "date": "2026-07-28",
+      "topics": [
+        "Indexing",
+        "Storage Management"
+      ],
+      "goal": "Learn indexing and storage techniques"
+    },
+    {
+      "day": 6,
+      "date": "2026-07-29",
+      "topics": [
+        "Transaction Management",
+        "Concurrency Control"
+      ],
+      "goal": "Understand transaction management"
+    },
+    {
+      "day": 7,
+      "date": "2026-07-30",
+      "topics": [
+        "Database Security",
+        "Backup and Recovery"
+      ],
+      "goal": "Learn database security and recovery"
+    },
+    {
+      "day": 8,
+      "date": "2026-07-31",
+      "topics": [],
+      "goal": "Revise all DBMS topics"
+    }
+  ],
+  "quizzes": [
+    {
+      "day": 1,
+      "date": "2026-07-24",
+      "score": 2,
+      "total": 5,
+      "percentage": 40,
+      "weakTopics": [
+        "Introduction to DBMS",
+        "DBMS Architecture"
+      ]
+    }
+  ],
+  "weakTopics": [
+    "Introduction to DBMS",
+    "DBMS Architecture"
+  ]
+}
