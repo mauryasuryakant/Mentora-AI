@@ -1,97 +1,131 @@
 {
+  "mode": "exam",
   "student": {
     "name": "Ayush",
-    "subject": "DBMS",
-    "examName": "Mid Exam",
-    "examDate": "2026-08-01",
     "hoursPerDay": 1
   },
+  "exams": [
+    {
+      "subject": "DBMS",
+      "name": "Mid exam",
+      "date": "2026-08-02"
+    },
+    {
+      "subject": "Python",
+      "name": "Mid exam",
+      "date": "2026-08-03"
+    }
+  ],
   "plan": [
     {
       "day": 1,
       "date": "2026-07-24",
+      "subject": "DBMS",
       "topics": [
-        "Introduction to DBMS",
-        "DBMS Architecture"
+        "Database Introduction",
+        "Database Models"
       ],
-      "goal": "Understand DBMS basics"
+      "goal": "Understand DBMS basics",
+      "type": "study"
     },
     {
       "day": 2,
       "date": "2026-07-25",
+      "subject": "DBMS",
       "topics": [
-        "Data Models",
-        "ER Diagrams"
+        "Database Schemas",
+        "Data Normalization"
       ],
-      "goal": "Learn data modeling concepts"
+      "goal": "Learn database design",
+      "type": "study"
     },
     {
       "day": 3,
       "date": "2026-07-26",
+      "subject": "Python",
       "topics": [
-        "Relational Data Model",
-        "Normalization"
+        "Introduction to Python",
+        "Basic Syntax"
       ],
-      "goal": "Master relational data model"
+      "goal": "Start learning Python basics",
+      "type": "study"
     },
     {
       "day": 4,
       "date": "2026-07-27",
+      "subject": "DBMS",
       "topics": [
-        "SQL Basics",
-        "Query Optimization"
+        "Database Security",
+        "Transaction Management"
       ],
-      "goal": "Understand SQL fundamentals"
+      "goal": "Understand database security and transactions",
+      "type": "study"
     },
     {
       "day": 5,
       "date": "2026-07-28",
+      "subject": "Python",
       "topics": [
-        "Indexing",
-        "Storage Management"
+        "Control Structures",
+        "Functions"
       ],
-      "goal": "Learn indexing and storage techniques"
+      "goal": "Learn control structures and functions in Python",
+      "type": "study"
     },
     {
       "day": 6,
       "date": "2026-07-29",
+      "subject": "DBMS",
       "topics": [
-        "Transaction Management",
-        "Concurrency Control"
+        "Query Optimization",
+        "Indexing"
       ],
-      "goal": "Understand transaction management"
+      "goal": "Learn query optimization techniques",
+      "type": "study"
     },
     {
       "day": 7,
       "date": "2026-07-30",
+      "subject": "DBMS",
       "topics": [
-        "Database Security",
-        "Backup and Recovery"
+        "Revision of Database Introduction",
+        "Revision of Database Models"
       ],
-      "goal": "Learn database security and recovery"
+      "goal": "Revise DBMS basics",
+      "type": "revision"
     },
     {
       "day": 8,
       "date": "2026-07-31",
-      "topics": [],
-      "goal": "Revise all DBMS topics"
-    }
-  ],
-  "quizzes": [
+      "subject": "DBMS",
+      "topics": [
+        "Revision of Database Schemas",
+        "Revision of Data Normalization"
+      ],
+      "goal": "Revise database design",
+      "type": "revision"
+    },
     {
-      "day": 1,
-      "date": "2026-07-24",
-      "score": 2,
-      "total": 5,
-      "percentage": 40,
-      "weakTopics": [
-        "Introduction to DBMS",
-        "DBMS Architecture"
-      ]
+      "day": 9,
+      "date": "2026-08-01",
+      "subject": "DBMS",
+      "topics": [
+        "Final Revision of DBMS"
+      ],
+      "goal": "Final revision of DBMS",
+      "type": "revision"
+    },
+    {
+      "day": 10,
+      "date": "2026-08-02",
+      "subject": "DBMS",
+      "topics": [
+        "Final Revision of DBMS"
+      ],
+      "goal": "Final revision before exam",
+      "type": "revision"
     }
   ],
-  "weakTopics": [
-    "Introduction to DBMS",
-    "DBMS Architecture"
-  ]
+  "quizzes": [],
+  "weakTopics": []
 }

@@ -57,11 +57,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { api } from '../api/index.js'
+import { getProgress, saveProgress } from '../storage.js'
 
-const loading = ref(true)
-const plan    = ref([])
-const student = ref({})
-const doneSet = ref(new Set())
+const cached  = getProgress()
+const loading = ref(false)
+const plan    = ref(cached.plan    || [])
+const student = ref(cached.student || {})
+const doneSet = ref(new Set((cached.quizzes || []).map(q => q.day)))
 
 onMounted(async () => {
   try {
@@ -69,12 +71,10 @@ onMounted(async () => {
     const p   = res.progress || {}
     plan.value    = p.plan    || []
     student.value = p.student || {}
-    // Build set of completed day numbers from quizzes
     doneSet.value = new Set((p.quizzes || []).map(q => q.day))
+    saveProgress(p)
   } catch (e) {
     console.error(e)
-  } finally {
-    loading.value = false
   }
 })
 

@@ -140,6 +140,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { api } from '../api/index.js'
+import { getProgress, saveProgress } from '../storage.js'
 
 const route      = useRoute()
 const phase      = ref('loading')   // loading | answering | results | empty
@@ -156,7 +157,6 @@ const topicsList = computed(() =>
 )
 
 onMounted(async () => {
-  // Topics & day can come from query params (from Study Plan page)
   const qTopics = route.query.topics
   const qDay    = route.query.day
 
@@ -165,30 +165,23 @@ onMounted(async () => {
     currentDay.value = Number(qDay) || 1
     await loadQuiz(topics)
   } else {
-    // Load today's topics from progress
-    try {
-      const res    = await api.progress()
-      const p      = res.progress || {}
-      const todayStr = new Date().toISOString().split('T')[0]
-      const todayPlan = (p.plan || []).find(d => d.date === todayStr)
-      if (todayPlan) {
-        currentDay.value = todayPlan.day
-        await loadQuiz(todayPlan.topics)
-      } else if (p.plan?.length) {
-        // Default: use first incomplete day
-        const done  = new Set((p.quizzes || []).map(q => q.day))
-        const first = p.plan.find(d => !done.has(d.day))
-        if (first) {
-          currentDay.value = first.day
-          await loadQuiz(first.topics)
-        } else {
-          phase.value = 'empty'
-        }
+    // Use localStorage first — no extra API call needed
+    const p        = getProgress()
+    const todayStr = new Date().toISOString().split('T')[0]
+    const todayPlan = (p.plan || []).find(d => d.date === todayStr)
+    if (todayPlan) {
+      currentDay.value = todayPlan.day
+      await loadQuiz(todayPlan.topics)
+    } else if (p.plan?.length) {
+      const done  = new Set((p.quizzes || []).map(q => q.day))
+      const first = p.plan.find(d => !done.has(d.day))
+      if (first) {
+        currentDay.value = first.day
+        await loadQuiz(first.topics)
       } else {
         phase.value = 'empty'
       }
-    } catch (e) {
-      error.value = e.message
+    } else {
       phase.value = 'empty'
     }
   }
@@ -219,6 +212,11 @@ async function submitAnswers() {
     evaluation.value = res.evaluation
     motivation.value = res.motivation
     phase.value      = 'results'
+    // Update localStorage with latest quiz data
+    try {
+      const prog = await api.progress()
+      saveProgress(prog.progress || {})
+    } catch {}
   } catch (e) {
     error.value = e.message
   } finally {

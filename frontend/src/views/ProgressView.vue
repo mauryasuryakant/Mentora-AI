@@ -114,18 +114,18 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { api } from '../api/index.js'
+import { getProgress, saveProgress } from '../storage.js'
 
-const loading  = ref(true)
-const progress = ref({})
+const loading  = ref(false)
+const progress = ref(getProgress())
 
 onMounted(async () => {
   try {
     const res      = await api.progress()
     progress.value = res.progress || {}
+    saveProgress(res.progress || {})
   } catch (e) {
     console.error(e)
-  } finally {
-    loading.value = false
   }
 })
 
