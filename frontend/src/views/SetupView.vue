@@ -222,11 +222,12 @@
 <script setup>
 import { ref } from 'vue'
 import { api } from '../api/index.js'
-import { saveProgress } from '../storage.js'
+import { getProgress, saveProgress } from '../storage.js'
 
 const step    = ref(1)
 const mode    = ref('')
 const loading = ref(false)
+const error   = ref('')
 const today   = new Date().toISOString().split('T')[0]
 const placeholders = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'History', 'Computer Science', 'Economics']
 
@@ -260,9 +261,10 @@ function goToExamDetails() {
 
 async function submitRegular() {
   loading.value = true
+  error.value   = ''
   try {
     const subjects = reg.value.subjectsRaw.split(',').map(s => s.trim()).filter(Boolean)
-    await api.studyPlan({
+    const res = await api.studyPlan({
       mode: 'regular',
       student: {
         name:        reg.value.name.trim(),
@@ -271,11 +273,19 @@ async function submitRegular() {
         skillLevel:  reg.value.skillLevel
       }
     })
-    // Cache the full progress so other pages load instantly
-    const prog = await api.progress()
-    saveProgress(prog.progress)
+    // Build and save full progress object directly to localStorage
+    const existing = getProgress()
+    saveProgress({
+      mode:       'regular',
+      student:    { name: reg.value.name.trim(), subjects, hoursPerDay: Number(reg.value.hoursPerDay), skillLevel: reg.value.skillLevel },
+      exams:      null,
+      plan:       res.plan,
+      quizzes:    existing.quizzes    || [],
+      weakTopics: existing.weakTopics || []
+    })
     step.value = 'done'
   } catch (e) {
+    error.value = e.message
     console.error(e)
   } finally {
     loading.value = false
@@ -284,22 +294,31 @@ async function submitRegular() {
 
 async function submitExam() {
   loading.value = true
+  error.value   = ''
   try {
     const exams = ex.value.exams.map(e => ({
       subject: e.subject.trim(),
-      name:    ex.value.examName.trim(),   // shared exam name
+      name:    ex.value.examName.trim(),
       date:    e.date || null
     }))
-    await api.studyPlan({
+    const res = await api.studyPlan({
       mode: 'exam',
       student: { name: ex.value.name.trim(), hoursPerDay: Number(ex.value.hoursPerDay) },
       exams
     })
-    // Cache the full progress so other pages load instantly
-    const prog = await api.progress()
-    saveProgress(prog.progress)
+    // Build and save full progress object directly to localStorage
+    const existing = getProgress()
+    saveProgress({
+      mode:       'exam',
+      student:    { name: ex.value.name.trim(), hoursPerDay: Number(ex.value.hoursPerDay) },
+      exams:      res.exams,
+      plan:       res.plan,
+      quizzes:    existing.quizzes    || [],
+      weakTopics: existing.weakTopics || []
+    })
     step.value = 'done'
   } catch (e) {
+    error.value = e.message
     console.error(e)
   } finally {
     loading.value = false

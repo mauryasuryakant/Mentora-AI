@@ -2,12 +2,7 @@
   <div class="page">
     <h1 class="mb-1">📅 Study Plan</h1>
 
-    <div class="loading-box" v-if="loading">
-      <div class="spinner"></div>
-      <span>Loading your plan…</span>
-    </div>
-
-    <div v-else-if="!plan.length" class="card text-center" style="padding:3rem">
+    <div v-if="!plan.length" class="card text-center" style="padding:3rem">
       <p class="mb-2">No study plan yet.</p>
       <RouterLink to="/setup" class="btn btn-primary">Generate a Plan</RouterLink>
     </div>
@@ -55,28 +50,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { api } from '../api/index.js'
-import { getProgress, saveProgress } from '../storage.js'
+import { ref } from 'vue'
+import { getProgress } from '../storage.js'
 
 const cached  = getProgress()
-const loading = ref(false)
 const plan    = ref(cached.plan    || [])
 const student = ref(cached.student || {})
 const doneSet = ref(new Set((cached.quizzes || []).map(q => q.day)))
 
-onMounted(async () => {
-  try {
-    const res = await api.progress()
-    const p   = res.progress || {}
-    plan.value    = p.plan    || []
-    student.value = p.student || {}
-    doneSet.value = new Set((p.quizzes || []).map(q => q.day))
-    saveProgress(p)
-  } catch (e) {
-    console.error(e)
-  }
-})
 
 function isDone(dayNum)  { return doneSet.value.has(dayNum) }
 function isToday(dayNum) {

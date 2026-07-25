@@ -1,6 +1,5 @@
 import express from 'express'
 import { askAI } from '../services/ai.js'
-import { readProgress, writeProgress } from '../services/store.js'
 import { examPlannerPrompt, regularPlannerPrompt } from '../prompts/studyPlanner.js'
 import quizGeneratorPrompt from '../prompts/quizGenerator.js'
 import evaluationPrompt    from '../prompts/evaluation.js'
@@ -58,6 +57,7 @@ function assignMissingDates(exams) {
 }
 
 // ─── POST /api/study-plan ─────────────────────────────────────────────────────
+// Returns the generated plan; frontend saves it to localStorage.
 router.post('/study-plan', async (req, res) => {
   try {
     const { mode, student, exams } = req.body
@@ -103,16 +103,6 @@ and do not schedule study sessions after an exam's date.
       aiResponse = await askAI(examPlannerPrompt, userMessage)
       parsed     = JSON.parse(aiResponse)
 
-      // Persist
-      const progress = readProgress()
-      progress.mode       = 'exam'
-      progress.student    = { name: student.name, hoursPerDay: student.hoursPerDay }
-      progress.exams      = filledExams
-      progress.plan       = parsed.plan
-      progress.quizzes    = progress.quizzes    || []
-      progress.weakTopics = progress.weakTopics || []
-      writeProgress(progress)
-
       return res.json({ success: true, plan: parsed.plan, exams: filledExams })
     }
 
@@ -136,21 +126,6 @@ Focus on progressive skill building, not exam pressure.
 
       aiResponse = await askAI(regularPlannerPrompt, userMessage)
       parsed     = JSON.parse(aiResponse)
-
-      // Persist
-      const progress = readProgress()
-      progress.mode       = 'regular'
-      progress.student    = {
-        name:       student.name,
-        subjects:   student.subjects,
-        hoursPerDay: student.hoursPerDay,
-        skillLevel: student.skillLevel
-      }
-      progress.exams      = null
-      progress.plan       = parsed.plan
-      progress.quizzes    = progress.quizzes    || []
-      progress.weakTopics = progress.weakTopics || []
-      writeProgress(progress)
 
       return res.json({ success: true, plan: parsed.plan })
     }
@@ -190,9 +165,10 @@ Mix the question types (multiple_choice, true_false, short_answer).
 })
 
 // ─── POST /api/evaluate ───────────────────────────────────────────────────────
+// Evaluates answers via AI only. Frontend handles saving quiz results to localStorage.
 router.post('/evaluate', async (req, res) => {
   try {
-    const { questions, studentAnswers, day } = req.body
+    const { questions, studentAnswers, studentName } = req.body
 
     if (!questions || !studentAnswers) {
       return res.status(400).json({ error: 'questions and studentAnswers are required' })
@@ -215,26 +191,9 @@ ${JSON.stringify(pairs, null, 2)}
     const aiResponse = await askAI(evaluationPrompt, evalMessage)
     const evaluation = JSON.parse(aiResponse)
 
-    // Save quiz result to progress
-    const progress = readProgress()
-    progress.quizzes = progress.quizzes || []
-    progress.quizzes.push({
-      day:        day || progress.quizzes.length + 1,
-      date:       new Date().toISOString().split('T')[0],
-      score:      evaluation.score,
-      total:      evaluation.total,
-      percentage: evaluation.percentage,
-      weakTopics: evaluation.weakTopics
-    })
-
-    const allWeak = new Set([...(progress.weakTopics || []), ...(evaluation.weakTopics || [])])
-    progress.weakTopics = [...allWeak]
-    writeProgress(progress)
-
     // Generate motivation
-    const student  = progress.student || {}
     const motivMsg = `
-Student name: ${student.name || 'Student'}
+Student name: ${studentName || 'Student'}
 Topics studied today: ${questions.map(q => q.topic).join(', ')}
 Score: ${evaluation.score} out of ${evaluation.total} (${evaluation.percentage}%)
 Weak topics: ${evaluation.weakTopics.join(', ') || 'none'}
@@ -250,16 +209,6 @@ Weak topics: ${evaluation.weakTopics.join(', ') || 'none'}
   }
 })
 
-// ─── GET /api/progress ────────────────────────────────────────────────────────
-router.get('/progress', (req, res) => {
-  try {
-    const progress = readProgress()
-    res.json({ success: true, progress })
-  } catch (err) {
-    console.error('[/progress]', err.message)
-    res.status(500).json({ error: 'Failed to read progress.' })
-  }
-})
 
 // ─── POST /api/chat ───────────────────────────────────────────────────────────
 router.post('/chat', async (req, res) => {

@@ -1,14 +1,8 @@
 <template>
   <div class="page">
 
-    <!-- Loading -->
-    <div class="loading-box" v-if="loading">
-      <div class="spinner"></div>
-      <span>Loading your dashboard…</span>
-    </div>
-
     <!-- No setup yet -->
-    <div v-else-if="!progress.student" class="empty-state card text-center">
+    <div v-if="!progress.student" class="empty-state card text-center">
       <div style="font-size:3rem;margin-bottom:1rem">🎓</div>
       <h2 class="mb-1">Welcome to Mentora AI</h2>
       <p class="mb-3">You haven't set up your study profile yet. Let's get started!</p>
@@ -170,22 +164,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { api } from '../api/index.js'
-import { getProgress, saveProgress } from '../storage.js'
+import { ref, computed } from 'vue'
+import { getProgress } from '../storage.js'
 
-const loading  = ref(false)          // false = show cached data immediately
-const progress = ref(getProgress())  // instant load from localStorage
+const progress = ref(getProgress())  // instant load from localStorage — no API call needed
 
-onMounted(async () => {
-  try {
-    const res      = await api.progress()
-    progress.value = res.progress || {}
-    saveProgress(res.progress || {})
-  } catch (e) {
-    console.error(e)
-  }
-})
 
 // ── Mode helpers ──────────────────────────────────────────────────────────────
 const isExamMode = computed(() => progress.value.mode === 'exam')

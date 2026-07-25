@@ -2,12 +2,7 @@
   <div class="page">
     <h1 class="mb-1">📊 Progress</h1>
 
-    <div class="loading-box" v-if="loading">
-      <div class="spinner"></div>
-      <span>Loading progress…</span>
-    </div>
-
-    <div v-else-if="!progress.student" class="card text-center" style="padding:3rem">
+    <div v-if="!progress.student" class="card text-center" style="padding:3rem">
       <p class="mb-2">No data yet. Complete your first quiz to see progress.</p>
       <RouterLink to="/setup" class="btn btn-primary">Get Started</RouterLink>
     </div>
@@ -112,22 +107,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { api } from '../api/index.js'
-import { getProgress, saveProgress } from '../storage.js'
+import { ref, computed } from 'vue'
+import { getProgress } from '../storage.js'
 
-const loading  = ref(false)
-const progress = ref(getProgress())
+const progress = ref(getProgress())  // instant load from localStorage
 
-onMounted(async () => {
-  try {
-    const res      = await api.progress()
-    progress.value = res.progress || {}
-    saveProgress(res.progress || {})
-  } catch (e) {
-    console.error(e)
-  }
-})
 
 const quizzes  = computed(() => progress.value.quizzes || [])
 const avgScore = computed(() => {

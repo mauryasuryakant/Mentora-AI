@@ -18,10 +18,9 @@ http.interceptors.response.use(
 )
 
 export const api = {
-  health:     ()       => http.get('/health'),
-  studyPlan:  (data)   => http.post('/study-plan', data),
-  quiz:       (data)   => http.post('/quiz', data),
-  evaluate:   (data)   => http.post('/evaluate', data),
-  progress:   ()       => http.get('/progress'),
-  chat:       (data)   => http.post('/chat', data),
+  health:    ()     => http.get('/health'),
+  studyPlan: (data) => http.post('/study-plan', data),
+  quiz:      (data) => http.post('/quiz', data),
+  evaluate:  (data) => http.post('/evaluate', data),
+  chat:      (data) => http.post('/chat', data),
 }

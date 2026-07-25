@@ -204,19 +204,32 @@ async function submitAnswers() {
   error.value   = ''
   submitting.value = true
   try {
-    const res      = await api.evaluate({
-      questions: questions.value,
+    const p = getProgress()
+    const res = await api.evaluate({
+      questions:      questions.value,
       studentAnswers: answers.value,
-      day: currentDay.value
+      studentName:    p.student?.name || 'Student'
     })
     evaluation.value = res.evaluation
     motivation.value = res.motivation
     phase.value      = 'results'
-    // Update localStorage with latest quiz data
-    try {
-      const prog = await api.progress()
-      saveProgress(prog.progress || {})
-    } catch {}
+
+    // Save quiz result directly to localStorage
+    const progress  = getProgress()
+    const quizEntry = {
+      day:        currentDay.value,
+      date:       new Date().toISOString().split('T')[0],
+      score:      res.evaluation.score,
+      total:      res.evaluation.total,
+      percentage: res.evaluation.percentage,
+      weakTopics: res.evaluation.weakTopics || []
+    }
+    progress.quizzes = progress.quizzes || []
+    progress.quizzes.push(quizEntry)
+    const allWeak = new Set([...(progress.weakTopics || []), ...(res.evaluation.weakTopics || [])])
+    progress.weakTopics = [...allWeak]
+    saveProgress(progress)
+
   } catch (e) {
     error.value = e.message
   } finally {
