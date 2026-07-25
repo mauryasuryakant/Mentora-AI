@@ -32,8 +32,22 @@
 
         <p class="day-goal">🎯 {{ day.goal }}</p>
 
+        <!-- Topics with individual "Learn" buttons -->
         <div class="topic-list">
-          <span class="topic-tag" v-for="t in day.topics" :key="t">{{ t }}</span>
+          <div
+            class="topic-item"
+            v-for="t in day.topics"
+            :key="t"
+          >
+            <span class="topic-tag">{{ t }}</span>
+            <button
+              class="topic-learn-btn"
+              @click="learnTopic(t)"
+              :title="`Get AI resources for: ${t}`"
+            >
+              📚 Resources
+            </button>
+          </div>
         </div>
 
         <div class="day-action" v-if="isToday(day.day)">
@@ -50,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { getProgress } from '../storage.js'
 
 const cached  = getProgress()
@@ -58,6 +72,14 @@ const plan    = ref(cached.plan    || [])
 const student = ref(cached.student || {})
 const doneSet = ref(new Set((cached.quizzes || []).map(q => q.day)))
 
+// Injected from App.vue – opens the global AI chat panel
+const openAiChat = inject('openAiChat')
+
+function learnTopic(topicName) {
+  if (openAiChat) {
+    openAiChat(`Give me study resources, key concepts, and tips to learn: "${topicName}"`)
+  }
+}
 
 function isDone(dayNum)  { return doneSet.value.has(dayNum) }
 function isToday(dayNum) {
@@ -82,13 +104,44 @@ function formatDate(d) {
 .day-date   { font-size: 0.8rem; }
 .day-goal   { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.75rem; }
 
-.topic-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
-.topic-tag  {
+/* Topic list with resource buttons */
+.topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.topic-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(108,99,255,0.2);
+}
+.topic-tag {
   background: rgba(108,99,255,0.12);
   color: var(--primary);
-  border-radius: 6px;
-  padding: 0.2rem 0.65rem;
+  padding: 0.22rem 0.65rem;
   font-size: 0.8rem;
+  font-weight: 500;
 }
+.topic-learn-btn {
+  background: rgba(108,99,255,0.0);
+  border: none;
+  border-left: 1px solid rgba(108,99,255,0.2);
+  color: var(--text-muted);
+  padding: 0.22rem 0.55rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.topic-learn-btn:hover {
+  background: rgba(108,99,255,0.18);
+  color: var(--primary);
+}
+
 .day-action { margin-top: 0.5rem; }
 </style>
