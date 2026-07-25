@@ -282,16 +282,20 @@ function scoreClass(pct) {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.85rem 1.1rem;
+  padding: 0.95rem 1.25rem;
+  min-height: 48px;
   border: 1.5px solid var(--border);
   background: rgba(255, 255, 255, 0.02);
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--text-muted);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.option-label input { accent-color: var(--primary); width: 18px; height: 18px; }
+.option-label input { accent-color: var(--primary); width: 20px; height: 20px; }
 .option-label:hover { border-color: var(--primary); background: rgba(108,99,255,0.1); color: #fff; transform: translateX(3px); }
 .option-label.selected { 
   border-color: var(--primary); 
@@ -320,13 +324,16 @@ function scoreClass(pct) {
 }
 .score-total { font-size: 1.75rem; color: var(--text-muted); font-weight: 700; }
 
-.motivation-card { 
+.motiv-box { 
   display: flex; 
-  gap: 1.25rem; 
   align-items: center; 
-  background: linear-gradient(135deg, rgba(0,201,167,0.12) 0%, rgba(26,29,39,0.7) 100%); 
-  border: 1px solid rgba(0,201,167,0.35); 
-  box-shadow: 0 8px 24px rgba(0,201,167,0.15);
+  gap: 1.25rem; 
+  background: linear-gradient(135deg, rgba(0,201,167,0.15) 0%, rgba(108,99,255,0.12) 100%);
+  border: 1px solid rgba(0,201,167,0.3);
+  padding: 1.25rem 1.5rem; 
+  border-radius: var(--radius-sm); 
+  margin: 1.5rem 0 2rem;
+  text-align: left;
 }
 .motiv-icon { font-size: 2.2rem; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,201,167,0.5)); }
 .motiv-text { color: #fff; font-size: 1.05rem; line-height: 1.6; font-weight: 500; }
@@ -350,4 +357,11 @@ function scoreClass(pct) {
 
 .result-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
 .tag-list       { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+@media (max-width: 550px) {
+  .tf-options { flex-direction: column; gap: 0.75rem; }
+  .score-card { padding: 2rem 1rem; }
+  .motiv-box { flex-direction: column; text-align: center; gap: 0.75rem; padding: 1rem; }
+  .result-actions .btn { width: 100%; }
+}
 </style>

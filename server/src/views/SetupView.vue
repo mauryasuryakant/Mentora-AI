@@ -403,15 +403,17 @@ async function submitExam() {
 /* ── Exam count ──────────────────────────────────────────────── */
 .count-row { display: flex; align-items: center; gap: 1rem; }
 .count-btn {
-  width: 38px; height: 38px;
+  width: 44px; height: 44px;
+  min-width: 44px; min-height: 44px;
   border: 1.5px solid var(--border);
   background: var(--bg-input);
   color: var(--text);
-  border-radius: 10px;
-  font-size: 1.2rem;
+  border-radius: 12px;
+  font-size: 1.25rem;
   cursor: pointer;
   transition: all 0.2s;
   display: flex; align-items: center; justify-content: center;
+  touch-action: manipulation;
 }
 .count-btn:hover:not(:disabled) { border-color: var(--primary); background: rgba(108,99,255,0.15); color: #fff; transform: scale(1.05); }
 .count-btn:disabled { opacity: 0.35; cursor: not-allowed; }
@@ -468,4 +470,15 @@ async function submitExam() {
 /* ── Done screen ─────────────────────────────────────────────── */
 .done-state  { padding: 5rem 2rem; }
 .done-actions { display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+
+@media (max-width: 550px) {
+  .exam-row {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  .exam-idx { margin-top: 0; }
+  .done-state { padding: 2.5rem 1rem; }
+  .done-actions .btn { width: 100%; }
+}
 </style>

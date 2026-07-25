@@ -421,6 +421,32 @@ function scoreClass(pct) {
   transition: all 0.2s;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
+  touch-action: manipulation;
 }
 .reset-link:hover { opacity: 1; color: var(--danger); background: rgba(255,83,112,0.1); }
+
+@media (max-width: 600px) {
+  .dash-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .dash-actions {
+    width: 100%;
+  }
+  .dash-actions .btn {
+    flex: 1;
+  }
+  .exam-countdown-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .exam-right {
+    text-align: left;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+}
 </style>

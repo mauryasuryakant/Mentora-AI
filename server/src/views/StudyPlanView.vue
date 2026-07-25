@@ -168,13 +168,18 @@ function isToday(dayNum) {
   border: none;
   border-left: 1px solid rgba(108,99,255,0.3);
   color: #c3bdff;
-  padding: 0.3rem 0.7rem;
-  font-size: 0.78rem;
+  padding: 0.45rem 0.85rem;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
   white-space: nowrap;
+  touch-action: manipulation;
 }
 .topic-learn-btn:hover {
   background: var(--primary);
@@ -182,4 +187,15 @@ function isToday(dayNum) {
 }
 
 .day-action { margin-top: 0.75rem; }
+
+@media (max-width: 500px) {
+  .day-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .day-action .btn {
+    width: 100%;
+  }
+}
 </style>

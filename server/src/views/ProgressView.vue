@@ -68,34 +68,36 @@
         </div>
 
         <!-- Table -->
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Day</th>
-              <th>Date</th>
-              <th>Score</th>
-              <th>Percentage</th>
-              <th>Weak Topics</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="q in quizzes" :key="q.day">
-              <td>Day {{ q.day }}</td>
-              <td class="text-muted">{{ q.date }}</td>
-              <td>{{ q.score }}/{{ q.total }}</td>
-              <td :class="scoreClass(q.percentage)">{{ q.percentage }}%</td>
-              <td>
-                <span
-                  class="badge badge-warning"
-                  style="font-size:.7rem;margin-right:.25rem"
-                  v-for="t in (q.weakTopics || [])"
-                  :key="t"
-                >{{ t }}</span>
-                <span v-if="!q.weakTopics?.length" class="text-muted" style="font-size:.8rem">None</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Date</th>
+                <th>Score</th>
+                <th>Percentage</th>
+                <th>Weak Topics</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="q in quizzes" :key="q.day">
+                <td>Day {{ q.day }}</td>
+                <td class="text-muted">{{ q.date }}</td>
+                <td>{{ q.score }}/{{ q.total }}</td>
+                <td :class="scoreClass(q.percentage)">{{ q.percentage }}%</td>
+                <td>
+                  <span
+                    class="badge badge-warning"
+                    style="font-size:.7rem;margin-right:.25rem"
+                    v-for="t in (q.weakTopics || [])"
+                    :key="t"
+                  >{{ t }}</span>
+                  <span v-if="!q.weakTopics?.length" class="text-muted" style="font-size:.8rem">None</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div v-else class="card text-center" style="padding:2rem">
@@ -196,11 +198,13 @@ function barClass(pct) {
   display: flex;
   align-items: flex-end;
   gap: 10px;
-  height: 140px;
-  padding: 1rem 0.5rem 0;
+  height: 150px;
+  padding: 1rem 0.5rem 0.5rem;
   border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
-.bar-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; min-width: 28px; height: 100%; justify-content: flex-end; }
+.bar-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; min-width: 36px; height: 100%; justify-content: flex-end; }
 .bar-fill { 
   width: 100%; 
   border-radius: 6px 6px 0 0; 
@@ -215,7 +219,8 @@ function barClass(pct) {
 .bar-label   { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
 
 /* Table */
-.history-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.92rem; }
+.table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.history-table { width: 100%; min-width: 500px; border-collapse: separate; border-spacing: 0; font-size: 0.92rem; }
 .history-table th { text-align: left; color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 0.75rem 0.8rem; border-bottom: 2px solid var(--border); }
 .history-table td { padding: 0.85rem 0.8rem; border-bottom: 1px solid var(--border); transition: background 0.15s; }
 .history-table tr:hover td { background: rgba(255,255,255,0.03); }

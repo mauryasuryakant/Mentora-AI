@@ -343,3 +343,78 @@ p  { color: var(--text-muted); }
 .gap-1        { gap: 0.5rem; }
 .gap-2        { gap: 1rem; }
 .w-full       { width: 100%; }
+
+/* ─── Responsive & Touch Device Compatibility ─────────────────── */
+/* Ensure effortless touch targets and instant tap response on touch devices */
+button, a, input, select, textarea, label, .chip, .option-label, .count-btn, .topic-learn-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 768px) {
+  /* Prevent iOS Safari auto-zoom on inputs by enforcing 16px minimum font size */
+  input, select, textarea, .form-input, .form-select {
+    font-size: 16px !important;
+  }
+
+  /* Optimize page container and card padding for narrow mobile screens */
+  .page {
+    padding: 1.25rem 0.85rem !important;
+  }
+  .card {
+    padding: 1.25rem 1rem !important;
+    border-radius: 16px;
+  }
+
+  /* Enhance button touch targets on mobile */
+  .btn {
+    min-height: 44px;
+    padding: 0.75rem 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Smooth horizontal scrolling for tables and containers on touch screens */
+  .table-responsive, .nav-links, .bar-chart {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .table-responsive::-webkit-scrollbar, .nav-links::-webkit-scrollbar, .bar-chart::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .nav-inner {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    justify-content: space-between;
+  }
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: inline-flex !important;
+  }
+}
+
+@media (min-width: 701px) {
+  .mobile-only {
+    display: none !important;
+  }
+  .mobile-menu {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 1rem 0.65rem !important;
+  }
+  .card {
+    padding: 1rem 0.85rem !important;
+  }
+}
