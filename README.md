@@ -15,37 +15,62 @@ Built for **SDG 4 – Quality Education**.
 
 ---
 
-## Quick Start
+## Quick Start (Unified Application)
+
+The entire full-stack application (both frontend UI and backend API) is consolidated into the `server/` folder for simplicity.
 
 ### 1. Clone & Setup
 
 ```bash
 git clone <repo-url>
-cd Mentora-AI
+cd Mentora-AI/server
 ```
 
-### 2. Backend
+### 2. Environment Variables
+
+Create `.env` inside the `server/` directory (you can copy from `.env.example`):
 
 ```bash
-cd backend
 cp .env.example .env        # add your GROQ_API_KEY
-npm install
-npm run dev
 ```
 
-### 3. Frontend
+```env
+GROQ_API_KEY=your_groq_api_key_here
+PORT=3000
+```
+
+### 3. Install & Run (Development Mode)
+
+Start both the Express API backend and Vite Vue frontend simultaneously with a single command:
 
 ```bash
-cd frontend
 npm install
 npm run dev
 ```
 
-### 4. Open in Browser
+- **Frontend UI**: http://localhost:5173 (with automated API proxying to backend)
+- **Backend API**: http://localhost:3000
 
+---
+
+## Production / Full-Stack Mode
+
+To build and run the application as a single Node/Express server serving both the API and the compiled Vue SPA:
+
+```bash
+cd server
+npm run build
+npm start
 ```
-http://localhost:5173
-```
+
+- **Unified Application**: Access everything at http://localhost:3000
+
+---
+
+## Repository Structure
+
+- `server/` – **Main Application:** Contains the combined full-stack Node.js + Vue 3 application.
+- `frontend/` & `backend/` – Kept intact in this test repository for reference purposes.
 
 ---
 
@@ -57,17 +82,6 @@ http://localhost:5173
 - ✅ **Answer Evaluation** – Score, explanations, weak topics
 - 📊 **Progress Tracker** – Scores, streaks, improvements
 - 💬 **Motivation** – Personalised messages after every quiz
-
----
-
-## Environment Variables
-
-Create `backend/.env`:
-
-```
-GROQ_API_KEY=your_groq_api_key_here
-PORT=3000
-```
 
 ---
 
