@@ -204,11 +204,10 @@ async function submitAnswers() {
   error.value   = ''
   submitting.value = true
   try {
-    const p = getProgress()
     const res = await api.evaluate({
       questions:      questions.value,
       studentAnswers: answers.value,
-      studentName:    p.student?.name || 'Student'
+      studentName:    'Student'
     })
     evaluation.value = res.evaluation
     motivation.value = res.motivation

@@ -50,11 +50,6 @@
       <div class="card">
 
         <div class="form-group">
-          <label class="form-label">Your Name</label>
-          <input v-model="reg.name" class="form-input" placeholder="e.g. Priya" />
-        </div>
-
-        <div class="form-group">
           <label class="form-label">
             Subject(s)
             <span class="field-hint">separate multiple with commas</span>
@@ -105,18 +100,13 @@
         <span class="badge badge-primary">📝 Exam Preparation</span>
       </div>
 
-      <h1 class="mb-1 mt-2">Basic Information</h1>
-      <p class="mb-3">Tell us about yourself and your exams.</p>
+      <h1 class="mb-1 mt-2">Exam Setup</h1>
+      <p class="mb-3">Tell us about your exams so we can build the optimal plan.</p>
 
       <div class="card">
         <div class="alert alert-error mb-2" v-if="error">{{ error }}</div>
 
         <div class="grid-2">
-          <div class="form-group">
-            <label class="form-label">Your Name</label>
-            <input v-model="ex.name" class="form-input" placeholder="e.g. Arjun" />
-          </div>
-
           <div class="form-group">
             <label class="form-label">Hours Available per Day</label>
             <select v-model="ex.hoursPerDay" class="form-select">
@@ -126,14 +116,14 @@
               </option>
             </select>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label class="form-label">
-            Exam Name
-            <span class="field-hint">shared across all your exams, e.g. Board Exam, Final Exam</span>
-          </label>
-          <input v-model="ex.examName" class="form-input" placeholder="e.g. Final Exam" />
+          <div class="form-group">
+            <label class="form-label">
+              Exam Name
+              <span class="field-hint">e.g. Board Exam, Final Exam</span>
+            </label>
+            <input v-model="ex.examName" class="form-input" placeholder="e.g. Final Exam" />
+          </div>
         </div>
 
         <div class="form-group">
@@ -212,7 +202,7 @@
       </p>
       <div class="done-actions">
         <RouterLink to="/study-plan" class="btn btn-primary">📅 View Study Plan</RouterLink>
-        <RouterLink to="/dashboard"  class="btn btn-outline">📊 Dashboard</RouterLink>
+        <RouterLink to="/"           class="btn btn-outline">📊 Dashboard</RouterLink>
       </div>
     </div>
 
@@ -232,11 +222,11 @@ const today   = new Date().toISOString().split('T')[0]
 const placeholders = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'History', 'Computer Science', 'Economics']
 
 // ── Regular Study ─────────────────────────────────────────────────────────────
-const reg = ref({ name: '', subjectsRaw: '', hoursPerDay: '', skillLevel: 'Beginner' })
+const reg = ref({ subjectsRaw: '', hoursPerDay: '', skillLevel: 'Beginner' })
 
 // ── Exam Prep ─────────────────────────────────────────────────────────────────
 const ex = ref({
-  name: '', hoursPerDay: '', examName: '', count: 2,
+  hoursPerDay: '', examName: '', count: 2,
   exams: [{ subject: '', date: '' }, { subject: '', date: '' }]
 })
 
@@ -267,17 +257,16 @@ async function submitRegular() {
     const res = await api.studyPlan({
       mode: 'regular',
       student: {
-        name:        reg.value.name.trim(),
+        name:        'Student',    // placeholder — backend requires it for the prompt
         subjects,
         hoursPerDay: Number(reg.value.hoursPerDay),
         skillLevel:  reg.value.skillLevel
       }
     })
-    // Build and save full progress object directly to localStorage
     const existing = getProgress()
     saveProgress({
       mode:       'regular',
-      student:    { name: reg.value.name.trim(), subjects, hoursPerDay: Number(reg.value.hoursPerDay), skillLevel: reg.value.skillLevel },
+      student:    { subjects, hoursPerDay: Number(reg.value.hoursPerDay), skillLevel: reg.value.skillLevel },
       exams:      null,
       plan:       res.plan,
       quizzes:    existing.quizzes    || [],
@@ -303,14 +292,13 @@ async function submitExam() {
     }))
     const res = await api.studyPlan({
       mode: 'exam',
-      student: { name: ex.value.name.trim(), hoursPerDay: Number(ex.value.hoursPerDay) },
+      student: { name: 'Student', hoursPerDay: Number(ex.value.hoursPerDay) },
       exams
     })
-    // Build and save full progress object directly to localStorage
     const existing = getProgress()
     saveProgress({
       mode:       'exam',
-      student:    { name: ex.value.name.trim(), hoursPerDay: Number(ex.value.hoursPerDay) },
+      student:    { hoursPerDay: Number(ex.value.hoursPerDay) },
       exams:      res.exams,
       plan:       res.plan,
       quizzes:    existing.quizzes    || [],

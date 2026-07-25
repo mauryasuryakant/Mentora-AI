@@ -14,11 +14,14 @@
       <!-- Header -->
       <div class="dash-header mb-3">
         <div>
-          <h1>Hi, {{ progress.student.name }} 👋</h1>
+          <h1>Welcome back 👋</h1>
           <p v-if="isExamMode">{{ examSubjectList }} · {{ exams.length }} exam{{ exams.length > 1 ? 's' : '' }}</p>
           <p v-else>{{ subjectList }} · Continuous Learning</p>
         </div>
-        <RouterLink to="/quiz" class="btn btn-accent">📝 Start Today's Quiz</RouterLink>
+        <div class="dash-actions">
+          <button class="btn btn-outline btn-sm" @click="openAiChat()">🤖 Ask AI</button>
+          <RouterLink to="/quiz" class="btn btn-accent">📝 Start Quiz</RouterLink>
+        </div>
       </div>
 
       <!-- ── EXAM MODE ──────────────────────────────────────────── -->
@@ -123,7 +126,6 @@
       <!-- Today's Tasks -->
       <div class="card mb-3" v-if="todaysPlan">
         <h3 class="mb-2">📌 Today's Tasks — Day {{ todaysPlan.day }}</h3>
-        <p class="text-muted" style="font-size:.85rem;margin-bottom:.75rem">🎯 {{ todaysPlan.goal }}</p>
         <div class="topic-list">
           <span class="topic-tag" v-for="t in todaysPlan.topics" :key="t">{{ t }}</span>
         </div>
@@ -156,7 +158,7 @@
       <div class="quick-links">
         <RouterLink to="/study-plan" class="btn btn-outline">📅 View Full Plan</RouterLink>
         <RouterLink to="/progress"   class="btn btn-outline">📊 Progress Report</RouterLink>
-        <RouterLink to="/setup"      class="btn btn-outline" style="font-size:.8rem;opacity:.55">↺ Reset Setup</RouterLink>
+        <RouterLink to="/setup"      class="reset-link">↺ Reset & Start Over</RouterLink>
       </div>
     </div>
 
@@ -164,11 +166,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { getProgress } from '../storage.js'
 
 const progress = ref(getProgress())  // instant load from localStorage — no API call needed
 
+const openAiChat = inject('openAiChat')
 
 // ── Mode helpers ──────────────────────────────────────────────────────────────
 const isExamMode = computed(() => progress.value.mode === 'exam')
@@ -252,6 +255,7 @@ function scoreClass(pct) {
 
 <style scoped>
 .dash-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.dash-actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
 
 .section-title { font-weight: 600; color: var(--text-muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
 
@@ -293,6 +297,16 @@ function scoreClass(pct) {
 .quiz-row { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid var(--border); }
 .quiz-row:last-child { border-bottom: none; }
 .tag-list { display: flex; flex-wrap: wrap; gap: .5rem; }
-.quick-links { display: flex; gap: .75rem; flex-wrap: wrap; }
+.quick-links { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
 .empty-state { padding: 3rem 1.5rem; }
+
+/* Reset link — subtle and small */
+.reset-link {
+  font-size: .78rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  padding: 0.4rem 0;
+}
+.reset-link:hover { opacity: 1; color: var(--danger); }
 </style>

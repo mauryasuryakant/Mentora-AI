@@ -2,14 +2,16 @@
   <nav class="nav">
     <div class="nav-inner">
       <RouterLink to="/" class="nav-brand">🎓 Mentora AI</RouterLink>
-      <div class="nav-links">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/dashboard">Dashboard</RouterLink>
+
+      <!-- Show nav links only when user has an active plan -->
+      <div class="nav-links" v-if="hasSetup">
+        <RouterLink to="/">Dashboard</RouterLink>
         <RouterLink to="/study-plan">Plan</RouterLink>
         <RouterLink to="/quiz">Quiz</RouterLink>
         <RouterLink to="/progress">Progress</RouterLink>
       </div>
-      <!-- AI Chat button -->
+
+      <!-- AI Chat button — always visible -->
       <button
         id="open-ai-chat"
         class="nav-ai-btn"
@@ -22,7 +24,7 @@
     </div>
   </nav>
 
-  <RouterView />
+  <RouterView :key="$route.fullPath" />
 
   <!-- Global AI Chat Panel -->
   <AiChat
@@ -33,8 +35,19 @@
 </template>
 
 <script setup>
-import { ref, provide } from 'vue'
+import { ref, provide, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import AiChat from './components/AiChat.vue'
+import { hasActivePlan } from './storage.js'
+
+const route = useRoute()
+
+// Re-check on every route change so the nav updates after setup
+const hasSetup = computed(() => {
+  // Reading route.fullPath forces this to recompute on navigation
+  void route.fullPath
+  return hasActivePlan()
+})
 
 const chatOpen           = ref(false)
 const chatInitialMessage = ref('')

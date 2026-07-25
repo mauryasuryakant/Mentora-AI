@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { hasActivePlan } from '../storage.js'
 
 import HomeView      from '../views/HomeView.vue'
 import SetupView     from '../views/SetupView.vue'
@@ -8,9 +9,21 @@ import QuizView      from '../views/QuizView.vue'
 import ProgressView  from '../views/ProgressView.vue'
 
 const routes = [
-  { path: '/',           name: 'Home',      component: HomeView      },
+  {
+    path: '/',
+    name: 'Root',
+    // If user has an active plan → Dashboard, otherwise → Home (Get Started)
+    component: DashboardView,
+    beforeEnter: (to, from, next) => {
+      if (!hasActivePlan()) {
+        next({ name: 'Home', replace: true })
+      } else {
+        next()
+      }
+    }
+  },
+  { path: '/home',       name: 'Home',      component: HomeView      },
   { path: '/setup',      name: 'Setup',     component: SetupView     },
-  { path: '/dashboard',  name: 'Dashboard', component: DashboardView },
   { path: '/study-plan', name: 'StudyPlan', component: StudyPlanView },
   { path: '/quiz',       name: 'Quiz',      component: QuizView      },
   { path: '/progress',   name: 'Progress',  component: ProgressView  },

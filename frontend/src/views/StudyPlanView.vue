@@ -9,9 +9,8 @@
 
     <div v-else>
       <p class="mb-3 text-muted">
-        {{ plan.length }}-day plan for
-        <strong style="color:var(--text)">{{ student.subject }}</strong>
-        · Exam on {{ formatDate(student.examDate) }}
+        {{ plan.length }}-day plan ·
+        <strong style="color:var(--text)">{{ subjectList }}</strong>
       </p>
 
       <div
@@ -24,13 +23,14 @@
           <div class="day-meta">
             <span class="day-num">Day {{ day.day }}</span>
             <span class="day-date text-muted">{{ day.date }}</span>
+            <span class="badge badge-primary" v-if="day.subject" style="font-size:.68rem">{{ day.subject }}</span>
           </div>
           <span v-if="isDone(day.day)"  class="badge badge-success">✓ Done</span>
           <span v-else-if="isToday(day.day)" class="badge badge-primary">Today</span>
           <span v-else class="badge" style="background:rgba(255,255,255,0.05);color:var(--text-muted)">Upcoming</span>
         </div>
 
-        <p class="day-goal">🎯 {{ day.goal }}</p>
+        <p class="day-goal" v-if="day.goal">🎯 {{ day.goal }}</p>
 
         <!-- Topics with individual "Learn" buttons -->
         <div class="topic-list">
@@ -64,13 +64,18 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { getProgress } from '../storage.js'
 
 const cached  = getProgress()
 const plan    = ref(cached.plan    || [])
-const student = ref(cached.student || {})
 const doneSet = ref(new Set((cached.quizzes || []).map(q => q.day)))
+
+// Derive unique subject names from plan entries
+const subjectList = computed(() => {
+  const subjects = [...new Set(plan.value.map(d => d.subject).filter(Boolean))]
+  return subjects.length ? subjects.join(' · ') : (cached.student?.subjects || []).join(', ') || 'Your Studies'
+})
 
 // Injected from App.vue – opens the global AI chat panel
 const openAiChat = inject('openAiChat')
@@ -86,10 +91,6 @@ function isToday(dayNum) {
   const todayStr = new Date().toISOString().split('T')[0]
   const dayEntry = plan.value.find(d => d.day === dayNum)
   return dayEntry?.date === todayStr
-}
-function formatDate(d) {
-  if (!d) return ''
-  return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 </script>
 

@@ -62,9 +62,12 @@ router.post('/study-plan', async (req, res) => {
   try {
     const { mode, student, exams } = req.body
 
-    if (!mode || !student || !student.name || !student.hoursPerDay) {
-      return res.status(400).json({ error: 'Missing required fields: mode, student.name, student.hoursPerDay' })
+    if (!mode || !student || !student.hoursPerDay) {
+      return res.status(400).json({ error: 'Missing required fields: mode, student.hoursPerDay' })
     }
+
+    // Name is optional — default to 'Student'
+    const studentName = student.name?.trim() || 'Student'
 
     const today = new Date().toISOString().split('T')[0]
     let aiResponse, parsed
@@ -87,7 +90,7 @@ router.post('/study-plan', async (req, res) => {
       const totalDays    = Math.max(1, Math.ceil((new Date(lastExamDate) - new Date(today)) / (1000 * 60 * 60 * 24)))
 
       const userMessage = `
-Student name: ${student.name}
+Student name: ${studentName}
 Hours available per day: ${student.hoursPerDay}
 Today's date: ${today}
 Total days until last exam: ${totalDays}
@@ -113,7 +116,7 @@ and do not schedule study sessions after an exam's date.
       }
 
       const userMessage = `
-Student name: ${student.name}
+Student name: ${studentName}
 Subjects: ${student.subjects.join(', ')}
 Hours available per day: ${student.hoursPerDay}
 Skill level: ${student.skillLevel || 'Beginner'}

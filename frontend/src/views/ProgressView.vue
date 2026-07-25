@@ -122,8 +122,14 @@ const bestScore = computed(() =>
   quizzes.value.length ? Math.max(...quizzes.value.map(q => q.percentage)) : 0
 )
 const daysLeft = computed(() => {
-  if (!progress.value.student?.examDate) return '—'
-  const diff = new Date(progress.value.student.examDate) - new Date()
+  const exams = progress.value.exams || []
+  const todayStr = new Date().toISOString().split('T')[0]
+  // Find the nearest upcoming exam date
+  const upcoming = exams
+    .filter(e => e.date >= todayStr)
+    .sort((a, b) => a.date.localeCompare(b.date))
+  if (!upcoming.length) return '—'
+  const diff = new Date(upcoming[0].date) - new Date()
   return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)))
 })
 const overallPct = computed(() => {
