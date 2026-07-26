@@ -1,12 +1,15 @@
 import axios from 'axios'
 
 // Dynamically determine baseURL:
-// If running on standard ports (Vite dev server 5173 or Express backend 3000), use '/api'.
-// If opened via Live Server (port 5500), file:// protocol, or any custom port, fall back directly to http://localhost:3000/api.
+// In production deployments (cloud hosting, custom domains, etc.), always use relative '/api'.
+// On localhost, if running on standard ports (Vite dev server 5173 or Express backend 3000), use '/api'.
+// Only fall back to http://localhost:3000/api when opened via Live Server (port 5500), file:// protocol, or local static preview servers.
 let baseURL = '/api'
 if (typeof window !== 'undefined') {
-  const { protocol, port } = window.location
-  if (protocol === 'file:' || (port && port !== '3000' && port !== '5173')) {
+  const { protocol, hostname, port } = window.location
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1'
+  
+  if (protocol === 'file:' || (isLocalhost && port && port !== '3000' && port !== '5173')) {
     baseURL = 'http://localhost:3000/api'
   }
 }
