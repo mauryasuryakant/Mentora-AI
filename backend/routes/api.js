@@ -78,6 +78,12 @@ router.post('/study-plan', async (req, res) => {
         return res.status(400).json({ error: 'Exam mode requires at least one exam' })
       }
 
+      for (const exam of exams) {
+        if (exam.date && exam.date < today) {
+          return res.status(400).json({ error: `Exam date for "${exam.subject || 'Subject'}" (${exam.date}) cannot be in the past. Please select today (${today}) or a future date.` })
+        }
+      }
+
       // Auto-fill missing dates
       const filledExams = assignMissingDates(
         exams.map(e => ({ ...e })) // shallow copy

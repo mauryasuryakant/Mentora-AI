@@ -285,6 +285,11 @@ async function submitExam() {
   loading.value = true
   error.value   = ''
   try {
+    for (const e of ex.value.exams) {
+      if (e.date && e.date < today) {
+        throw new Error(`The exam date for "${e.subject || 'Exam'}" (${e.date}) cannot be in the past. Please select today (${today}) or a future date.`)
+      }
+    }
     const exams = ex.value.exams.map(e => ({
       subject: e.subject.trim(),
       name:    ex.value.examName.trim(),
@@ -316,50 +321,74 @@ async function submitExam() {
 
 <style scoped>
 /* ── Mode cards ──────────────────────────────────────────────── */
-.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-@media (max-width: 600px) { .mode-grid { grid-template-columns: 1fr; } }
+.mode-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; align-items: stretch; }
+@media (max-width: 650px) { .mode-grid { grid-template-columns: minmax(0, 1fr); } }
 
 .mode-card {
   text-align: left;
-  padding: 1.75rem;
+  padding: 2rem;
   cursor: pointer;
   border: 1.5px solid var(--border);
-  background: none;
+  background: rgba(26, 29, 39, 0.6);
+  backdrop-filter: blur(16px);
   color: inherit;
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  transition: border-color 0.2s, transform 0.15s;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin: 0 !important;
+  height: 100%;
+  width: 100%;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
 }
-.mode-card:hover { border-color: var(--primary); transform: translateY(-2px); }
-.mode-card h3    { font-size: 1.1rem; color: var(--text); margin: 0; }
-.mode-card p     { font-size: 0.875rem; color: var(--text-muted); margin: 0.15rem 0 0; }
-.mode-icon       { font-size: 2rem; }
+.mode-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 3px;
+  background: var(--grad-primary);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.mode-card:hover { 
+  border-color: rgba(108, 99, 255, 0.6); 
+  transform: translateY(-6px) scale(1.02); 
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(108, 99, 255, 0.15);
+  background: rgba(35, 39, 54, 0.75);
+}
+.mode-card:hover::before { opacity: 1; }
+.mode-card h3    { font-size: 1.25rem; font-weight: 700; color: #fff; margin: 0; }
+.mode-card p     { font-size: 0.92rem; color: var(--text-muted); margin: 0.25rem 0 0.5rem; line-height: 1.5; }
+.mode-icon       { font-size: 2.5rem; margin-bottom: 0.25rem; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
 
 .mode-features {
   list-style: none;
   padding: 0;
-  margin: 0.5rem 0 0;
+  margin: 0.75rem 0 0;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.35rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 0.75rem;
 }
-.mode-features li { font-size: 0.8rem; color: var(--text-muted); }
+.mode-features li { font-size: 0.85rem; color: #a29bfe; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; }
 
 /* ── Step header ─────────────────────────────────────────────── */
-.step-header { display: flex; align-items: center; gap: 0.75rem; }
+.step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
 .back-btn {
-  background: transparent;
+  background: rgba(255,255,255,0.04);
   border: 1px solid var(--border);
   color: var(--text-muted);
   border-radius: 8px;
-  padding: 0.35rem 0.8rem;
+  padding: 0.45rem 1rem;
   font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: all 0.2s;
 }
-.back-btn:hover { border-color: var(--primary); color: var(--primary); }
+.back-btn:hover { border-color: var(--primary); color: #fff; background: rgba(108,99,255,0.15); transform: translateX(-2px); }
 
 /* ── Field hint ──────────────────────────────────────────────── */
 .field-hint {
@@ -367,70 +396,89 @@ async function submitExam() {
   text-transform: none;
   letter-spacing: 0;
   color: var(--text-muted);
-  font-size: 0.75rem;
-  margin-left: 0.35rem;
+  font-size: 0.78rem;
+  margin-left: 0.5rem;
 }
 
 /* ── Exam count ──────────────────────────────────────────────── */
 .count-row { display: flex; align-items: center; gap: 1rem; }
 .count-btn {
-  width: 34px; height: 34px;
+  width: 44px; height: 44px;
+  min-width: 44px; min-height: 44px;
   border: 1.5px solid var(--border);
   background: var(--bg-input);
   color: var(--text);
-  border-radius: 8px;
-  font-size: 1.1rem;
+  border-radius: 12px;
+  font-size: 1.25rem;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   display: flex; align-items: center; justify-content: center;
+  touch-action: manipulation;
 }
-.count-btn:hover:not(:disabled) { border-color: var(--primary); }
+.count-btn:hover:not(:disabled) { border-color: var(--primary); background: rgba(108,99,255,0.15); color: #fff; transform: scale(1.05); }
 .count-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-.count-num { font-size: 1.5rem; font-weight: 700; color: var(--primary); min-width: 2rem; text-align: center; }
+.count-num { font-size: 1.6rem; font-weight: 800; color: var(--primary); min-width: 2.5rem; text-align: center; }
 
 /* ── Per-exam row ────────────────────────────────────────────── */
 .exam-row {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
-  padding: 1.1rem 1.25rem;
+  margin-bottom: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s;
 }
+.exam-row:hover { border-color: rgba(108, 99, 255, 0.3); }
 .exam-idx {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
   border-radius: 50%;
-  background: rgba(108,99,255,0.15);
-  color: var(--primary);
+  background: var(--grad-primary);
+  color: #fff;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 0.2rem;
+  box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
 }
 .exam-fields { flex: 1; }
 .auto-note {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  margin-top: 0.3rem;
+  margin-top: 0.4rem;
 }
 
 /* ── Button spinner ──────────────────────────────────────────── */
 .btn-spinner {
   display: inline-block;
-  width: 14px; height: 14px;
+  width: 16px; height: 16px;
   border: 2px solid rgba(255,255,255,0.3);
   border-top-color: #fff;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   vertical-align: middle;
-  margin-right: 4px;
+  margin-right: 6px;
 }
 
 /* ── Done screen ─────────────────────────────────────────────── */
-.done-state  { padding: 4rem 1.5rem; }
-.done-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.done-state  { padding: 5rem 2rem; }
+.done-actions { display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+
+@media (max-width: 550px) {
+  .exam-row {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  .exam-idx { margin-top: 0; }
+  .done-state { padding: 2.5rem 1rem; }
+  .done-actions .btn { width: 100%; }
+}
 </style>

@@ -68,34 +68,36 @@
         </div>
 
         <!-- Table -->
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Day</th>
-              <th>Date</th>
-              <th>Score</th>
-              <th>Percentage</th>
-              <th>Weak Topics</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="q in quizzes" :key="q.day">
-              <td>Day {{ q.day }}</td>
-              <td class="text-muted">{{ q.date }}</td>
-              <td>{{ q.score }}/{{ q.total }}</td>
-              <td :class="scoreClass(q.percentage)">{{ q.percentage }}%</td>
-              <td>
-                <span
-                  class="badge badge-warning"
-                  style="font-size:.7rem;margin-right:.25rem"
-                  v-for="t in (q.weakTopics || [])"
-                  :key="t"
-                >{{ t }}</span>
-                <span v-if="!q.weakTopics?.length" class="text-muted" style="font-size:.8rem">None</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Date</th>
+                <th>Score</th>
+                <th>Percentage</th>
+                <th>Weak Topics</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="q in quizzes" :key="q.day">
+                <td>Day {{ q.day }}</td>
+                <td class="text-muted">{{ q.date }}</td>
+                <td>{{ q.score }}/{{ q.total }}</td>
+                <td :class="scoreClass(q.percentage)">{{ q.percentage }}%</td>
+                <td>
+                  <span
+                    class="badge badge-warning"
+                    style="font-size:.7rem;margin-right:.25rem"
+                    v-for="t in (q.weakTopics || [])"
+                    :key="t"
+                  >{{ t }}</span>
+                  <span v-if="!q.weakTopics?.length" class="text-muted" style="font-size:.8rem">None</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div v-else class="card text-center" style="padding:2rem">
@@ -151,33 +153,78 @@ function barClass(pct) {
 </script>
 
 <style scoped>
-.summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-@media (max-width: 600px) { .summary-row { grid-template-columns: 1fr 1fr; } }
-.summary-card { text-align: center; padding: 1.25rem; }
-.s-num  { font-size: 1.8rem; font-weight: 700; }
-.s-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+.summary-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; align-items: stretch; }
+@media (max-width: 750px) { .summary-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 450px) { .summary-row { grid-template-columns: minmax(0, 1fr); } }
+.summary-card { 
+  text-align: center; 
+  padding: 1.5rem 1rem;
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+  margin: 0 !important;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.summary-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--grad-primary);
+  opacity: 0.7;
+}
+.summary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 15px rgba(108,99,255,0.15);
+}
+.s-num { 
+  font-size: 2.2rem; 
+  font-weight: 800; 
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  line-height: 1.1;
+}
+.s-label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-top: 0.35rem; text-transform: uppercase; letter-spacing: 0.04em; }
 
 /* CSS Bar Chart */
 .bar-chart {
   display: flex;
   align-items: flex-end;
-  gap: 6px;
-  height: 100px;
-  padding: 0 0.25rem;
+  gap: 10px;
+  height: 150px;
+  padding: 1rem 0.5rem 0.5rem;
   border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
-.bar-item { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; min-width: 24px; height: 100%; justify-content: flex-end; }
-.bar-fill { width: 100%; border-radius: 4px 4px 0 0; min-height: 4px; transition: height 0.5s ease; }
-.bar-success { background: var(--success); }
-.bar-warning { background: var(--warning); }
-.bar-danger  { background: var(--danger); }
-.bar-label   { font-size: 0.65rem; color: var(--text-muted); }
+.bar-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; min-width: 36px; height: 100%; justify-content: flex-end; }
+.bar-fill { 
+  width: 100%; 
+  border-radius: 6px 6px 0 0; 
+  min-height: 4px; 
+  transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s; 
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+.bar-item:hover .bar-fill { filter: brightness(1.2); box-shadow: 0 0 16px rgba(108,99,255,0.5); }
+.bar-success { background: linear-gradient(180deg, #00e5bc 0%, var(--success) 100%); }
+.bar-warning { background: linear-gradient(180deg, #ffd666 0%, var(--warning) 100%); }
+.bar-danger  { background: linear-gradient(180deg, #ff8599 0%, var(--danger) 100%); }
+.bar-label   { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
 
 /* Table */
-.history-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-.history-table th { text-align: left; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: .04em; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
-.history-table td { padding: 0.6rem; border-bottom: 1px solid var(--border); }
+.table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.history-table { width: 100%; min-width: 500px; border-collapse: separate; border-spacing: 0; font-size: 0.92rem; }
+.history-table th { text-align: left; color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 0.75rem 0.8rem; border-bottom: 2px solid var(--border); }
+.history-table td { padding: 0.85rem 0.8rem; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+.history-table tr:hover td { background: rgba(255,255,255,0.03); }
 .history-table tr:last-child td { border-bottom: none; }
 
-.tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 </style>

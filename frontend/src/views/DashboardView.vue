@@ -14,9 +14,9 @@
       <!-- Header -->
       <div class="dash-header mb-3">
         <div>
-          <h1>Welcome back 👋</h1>
-          <p v-if="isExamMode">{{ examSubjectList }} · {{ exams.length }} exam{{ exams.length > 1 ? 's' : '' }}</p>
-          <p v-else>{{ subjectList }} · Continuous Learning</p>
+          <h1 class="dash-title">Welcome back <span class="wave">👋</span></h1>
+          <p class="dash-sub" v-if="isExamMode"><span class="badge badge-primary">📝 Exam Mode</span> {{ examSubjectList }} · {{ exams.length }} exam{{ exams.length > 1 ? 's' : '' }}</p>
+          <p class="dash-sub" v-else><span class="badge badge-primary">📚 Regular Mode</span> {{ subjectList }} · Continuous Learning</p>
         </div>
         <div class="dash-actions">
           <button class="btn btn-outline btn-sm" @click="openAiChat()">🤖 Ask AI</button>
@@ -254,59 +254,199 @@ function scoreClass(pct) {
 </script>
 
 <style scoped>
-.dash-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-.dash-actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+.dash-header { 
+  display: flex; 
+  align-items: flex-start; 
+  justify-content: space-between; 
+  flex-wrap: wrap; 
+  gap: 1.25rem; 
+  padding: 1.25rem 1.5rem;
+  background: rgba(26, 29, 39, 0.4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+}
+.dash-title {
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-weight: 800;
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+.wave {
+  display: inline-block;
+  animation: wave 2.5s infinite;
+  transform-origin: 70% 70%;
+}
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(14deg); }
+  20%, 40% { transform: rotate(-8deg); }
+  50% { transform: rotate(0deg); }
+}
+.dash-sub { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.4rem; font-size: 0.95rem; }
+.dash-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
 
-.section-title { font-weight: 600; color: var(--text-muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+.section-title { 
+  font-weight: 700; 
+  color: var(--text-muted); 
+  font-size: 0.82rem; 
+  text-transform: uppercase; 
+  letter-spacing: 0.08em; 
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
 
 /* Exam countdown cards */
-.exam-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.exam-list { display: flex; flex-direction: column; gap: 0.85rem; }
 .exam-countdown-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.25rem;
-  transition: border-color 0.2s;
+  padding: 1.25rem 1.5rem;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+  border-left: 4px solid var(--primary);
+  margin: 0 !important;
+  width: 100%;
 }
-.exam-countdown-card.urgent { border-color: var(--danger); background: rgba(255,83,112,0.04); }
-.exam-info   { display: flex; flex-direction: column; gap: 0.15rem; }
-.exam-subject { font-weight: 600; font-size: 1rem; }
-.exam-name   { font-size: .8rem; }
+.exam-countdown-card:hover {
+  transform: translateX(4px) translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  border-left-color: var(--accent);
+}
+.exam-countdown-card.urgent { 
+  border-left-color: var(--danger); 
+  background: linear-gradient(90deg, rgba(255,83,112,0.1) 0%, rgba(26,29,39,0.75) 100%);
+  box-shadow: 0 0 24px rgba(255,83,112,0.15);
+}
+.exam-info   { display: flex; flex-direction: column; gap: 0.25rem; }
+.exam-subject { font-weight: 700; font-size: 1.15rem; color: #fff; }
+.exam-name   { font-size: 0.85rem; }
 .exam-right  { text-align: right; }
-.countdown-num   { font-size: 1.75rem; font-weight: 800; line-height: 1; }
-.countdown-label { font-size: .7rem; color: var(--text-muted); text-transform: uppercase; }
-.exam-date   { font-size: .75rem; margin-top: .2rem; }
+.countdown-num { 
+  font-size: 2.2rem; 
+  font-weight: 800; 
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+.countdown-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+.exam-date   { font-size: 0.78rem; margin-top: 0.25rem; font-weight: 500; }
 
 /* Stats */
-.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-@media (max-width: 600px) { .stats-row { grid-template-columns: 1fr 1fr; } }
-.stat-card  { text-align: center; padding: 1.25rem; }
-.stat-num   { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
-.stat-label { font-size: .8rem; color: var(--text-muted); margin-top: .25rem; }
+.stats-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; align-items: stretch; }
+@media (max-width: 750px) { .stats-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 450px) { .stats-row { grid-template-columns: minmax(0, 1fr); } }
+.stat-card  { 
+  text-align: center; 
+  padding: 1.5rem 1rem;
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+  margin: 0 !important;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--grad-primary);
+  opacity: 0.7;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 15px rgba(108,99,255,0.15);
+}
+.stat-num   { 
+  font-size: 2.2rem; 
+  font-weight: 800; 
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  line-height: 1.1;
+}
+.stat-label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-top: 0.35rem; text-transform: uppercase; letter-spacing: 0.04em; }
 
 /* Topic tags */
-.topic-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: .5rem; }
+.topic-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.75rem 0; }
 .topic-tag  {
-  background: rgba(108,99,255,0.12);
-  color: var(--primary);
-  border-radius: 6px;
-  padding: 0.2rem 0.65rem;
-  font-size: .8rem;
+  background: rgba(108,99,255,0.15);
+  color: #c3bdff;
+  border: 1px solid rgba(108,99,255,0.3);
+  border-radius: 8px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.topic-tag:hover {
+  background: var(--primary);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(108,99,255,0.4);
 }
 
-.quiz-row { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid var(--border); }
+.quiz-row { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  padding: 0.75rem 0.5rem; 
+  border-bottom: 1px solid var(--border); 
+  transition: background 0.2s, padding 0.2s;
+  border-radius: 6px;
+}
+.quiz-row:hover { background: rgba(255,255,255,0.03); padding-left: 0.8rem; padding-right: 0.8rem; }
 .quiz-row:last-child { border-bottom: none; }
-.tag-list { display: flex; flex-wrap: wrap; gap: .5rem; }
-.quick-links { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
-.empty-state { padding: 3rem 1.5rem; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+.quick-links { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-top: 1rem; }
+.empty-state { padding: 4rem 1.5rem; }
 
 /* Reset link — subtle and small */
 .reset-link {
-  font-size: .78rem;
+  font-size: 0.82rem;
+  font-weight: 600;
   color: var(--text-muted);
-  opacity: 0.5;
-  transition: opacity 0.2s, color 0.2s;
-  padding: 0.4rem 0;
+  opacity: 0.6;
+  transition: all 0.2s;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  touch-action: manipulation;
 }
-.reset-link:hover { opacity: 1; color: var(--danger); }
+.reset-link:hover { opacity: 1; color: var(--danger); background: rgba(255,83,112,0.1); }
+
+@media (max-width: 600px) {
+  .dash-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .dash-actions {
+    width: 100%;
+  }
+  .dash-actions .btn {
+    flex: 1;
+  }
+  .exam-countdown-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .exam-right {
+    text-align: left;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+}
 </style>

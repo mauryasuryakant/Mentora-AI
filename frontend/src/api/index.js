@@ -1,9 +1,18 @@
 import axios from 'axios'
 
-// All API calls go through this single file.
-// The base URL uses Vite's proxy in dev (/api → localhost:3000/api)
+// Dynamically determine baseURL:
+// If running on standard ports (Vite dev server 5173 or Express backend 3000), use '/api'.
+// If opened via Live Server (port 5500), file:// protocol, or any custom port, fall back directly to http://localhost:3000/api.
+let baseURL = '/api'
+if (typeof window !== 'undefined') {
+  const { protocol, port } = window.location
+  if (protocol === 'file:' || (port && port !== '3000' && port !== '5173')) {
+    baseURL = 'http://localhost:3000/api'
+  }
+}
+
 const http = axios.create({
-  baseURL: '/api',
+  baseURL,
   timeout: 30000, // 30s — AI calls can be slow
   headers: { 'Content-Type': 'application/json' }
 })
