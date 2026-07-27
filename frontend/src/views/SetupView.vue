@@ -326,11 +326,10 @@ async function submitExam() {
 
 .mode-card {
   text-align: left;
-  padding: 2rem;
+  padding: 1.75rem;
   cursor: pointer;
-  border: 1.5px solid var(--border);
-  background: rgba(26, 29, 39, 0.6);
-  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  background: var(--surface-elevated);
   color: inherit;
   border-radius: var(--radius);
   display: flex;
@@ -340,28 +339,18 @@ async function submitExam() {
   margin: 0 !important;
   height: 100%;
   width: 100%;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
   position: relative;
   overflow: hidden;
 }
-.mode-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 3px;
-  background: var(--grad-primary);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
 .mode-card:hover { 
-  border-color: rgba(108, 99, 255, 0.6); 
-  transform: translateY(-6px) scale(1.02); 
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(108, 99, 255, 0.15);
-  background: rgba(35, 39, 54, 0.75);
+  border-color: var(--primary); 
+  background: var(--surface-hover);
+  box-shadow: var(--shadow-md);
 }
-.mode-card:hover::before { opacity: 1; }
-.mode-card h3    { font-size: 1.25rem; font-weight: 700; color: #fff; margin: 0; }
-.mode-card p     { font-size: 0.92rem; color: var(--text-muted); margin: 0.25rem 0 0.5rem; line-height: 1.5; }
-.mode-icon       { font-size: 2.5rem; margin-bottom: 0.25rem; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+.mode-card h3    { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0; }
+.mode-card p     { font-size: 0.9rem; color: var(--text-secondary); margin: 0.25rem 0 0.5rem; line-height: 1.5; }
+.mode-icon       { font-size: 2.2rem; margin-bottom: 0.25rem; }
 
 .mode-features {
   list-style: none;
@@ -370,32 +359,32 @@ async function submitExam() {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid var(--border);
   padding-top: 0.75rem;
 }
-.mode-features li { font-size: 0.85rem; color: #a29bfe; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; }
+.mode-features li { font-size: 0.85rem; color: var(--primary-lt); font-weight: 500; display: flex; align-items: center; gap: 0.4rem; }
 
 /* ── Step header ─────────────────────────────────────────────── */
 .step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
 .back-btn {
-  background: rgba(255,255,255,0.04);
+  background: var(--surface);
   border: 1px solid var(--border);
-  color: var(--text-muted);
-  border-radius: 8px;
-  padding: 0.45rem 1rem;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.9rem;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
-.back-btn:hover { border-color: var(--primary); color: #fff; background: rgba(108,99,255,0.15); transform: translateX(-2px); }
+.back-btn:hover { border-color: var(--border-hover); color: var(--text-primary); background: var(--surface-hover); }
 
 /* ── Field hint ──────────────────────────────────────────────── */
 .field-hint {
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0;
-  color: var(--text-muted);
+  color: var(--text-tertiary);
   font-size: 0.78rem;
   margin-left: 0.5rem;
 }
@@ -403,21 +392,21 @@ async function submitExam() {
 /* ── Exam count ──────────────────────────────────────────────── */
 .count-row { display: flex; align-items: center; gap: 1rem; }
 .count-btn {
-  width: 44px; height: 44px;
-  min-width: 44px; min-height: 44px;
-  border: 1.5px solid var(--border);
-  background: var(--bg-input);
-  color: var(--text);
-  border-radius: 12px;
-  font-size: 1.25rem;
+  width: 40px; height: 40px;
+  min-width: 40px; min-height: 40px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
   display: flex; align-items: center; justify-content: center;
   touch-action: manipulation;
 }
-.count-btn:hover:not(:disabled) { border-color: var(--primary); background: rgba(108,99,255,0.15); color: #fff; transform: scale(1.05); }
+.count-btn:hover:not(:disabled) { border-color: var(--border-hover); background: var(--surface-hover); }
 .count-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-.count-num { font-size: 1.6rem; font-weight: 800; color: var(--primary); min-width: 2.5rem; text-align: center; }
+.count-num { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); min-width: 2.5rem; text-align: center; }
 
 /* ── Per-exam row ────────────────────────────────────────────── */
 .exam-row {
@@ -425,33 +414,33 @@ async function submitExam() {
   gap: 1.25rem;
   align-items: flex-start;
   margin-bottom: 1rem;
-  padding: 1.25rem 1.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  transition: border-color 0.2s;
+  transition: border-color 0.15s ease;
 }
-.exam-row:hover { border-color: rgba(108, 99, 255, 0.3); }
+.exam-row:hover { border-color: var(--border-hover); }
 .exam-idx {
-  width: 32px;
-  height: 32px;
-  min-width: 32px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
   border-radius: 50%;
-  background: var(--grad-primary);
-  color: #fff;
+  background: var(--surface-active);
+  border: 1px solid var(--primary-border);
+  color: var(--primary-lt);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 0.2rem;
-  box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
 }
 .exam-fields { flex: 1; }
 .auto-note {
   display: block;
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--text-tertiary);
   margin-top: 0.4rem;
 }
 

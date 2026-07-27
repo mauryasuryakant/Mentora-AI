@@ -1,9 +1,5 @@
 <template>
   <div class="home">
-    <!-- Background Glow Orbs -->
-    <div class="glow-orb orb-1"></div>
-    <div class="glow-orb orb-2"></div>
-
     <div class="hero-container">
       <!-- Top Badge -->
       <div class="hero-badge">
@@ -14,7 +10,7 @@
       <!-- Main Headline -->
       <h1 class="hero-title">
         Master Any Subject Faster With
-        <span class="gradient-text">Mentora AI</span>
+        <span class="headline-accent">Mentora AI</span>
       </h1>
 
       <!-- Subtitle -->
@@ -75,38 +71,6 @@
   padding: 1rem 1.25rem 0.75rem;
 }
 
-/* ── Ambient Background Glows ── */
-.glow-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.35;
-}
-.orb-1 {
-  width: 380px;
-  height: 380px;
-  background: var(--primary);
-  top: -80px;
-  left: 50%;
-  transform: translateX(-80%);
-  animation: float-slow 12s ease-in-out infinite alternate;
-}
-.orb-2 {
-  width: 320px;
-  height: 320px;
-  background: var(--accent);
-  top: 60px;
-  left: 50%;
-  transform: translateX(-10%);
-  animation: float-slow 14s ease-in-out infinite alternate-reverse;
-}
-@keyframes float-slow {
-  0%   { transform: translate(-70%, 0) scale(1); }
-  100% { transform: translate(-30%, 40px) scale(1.15); }
-}
-
 /* ── Hero Container ── */
 .hero-container {
   max-width: 680px;
@@ -125,29 +89,21 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.4rem 0.9rem;
-  background: rgba(108, 99, 255, 0.12);
-  border: 1px solid rgba(108, 99, 255, 0.3);
+  padding: 0.35rem 0.85rem;
+  background: var(--primary-subtle);
+  border: 1px solid var(--primary-border);
   border-radius: 999px;
-  color: #a29bfe;
+  color: var(--primary-lt);
   font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   margin-bottom: 1rem;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 20px rgba(108, 99, 255, 0.15);
 }
 .badge-dot {
-  width: 7px;
-  height: 7px;
-  background: var(--accent);
+  width: 6px;
+  height: 6px;
+  background: var(--primary);
   border-radius: 50%;
-  box-shadow: 0 0 8px var(--accent);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.75); }
 }
 
 /* ── Typography ── */
@@ -157,20 +113,17 @@
   line-height: 1.15;
   letter-spacing: -0.02em;
   margin-bottom: 0.85rem;
-  color: var(--text);
+  color: var(--text-primary);
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #a8a2ff 0%, var(--primary) 40%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.headline-accent {
+  color: var(--primary-lt);
   display: inline-block;
-  filter: drop-shadow(0 2px 16px rgba(108, 99, 255, 0.25));
 }
 
 .hero-sub {
   font-size: clamp(0.95rem, 2vw, 1.1rem);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.65;
   max-width: 580px;
   margin: 0 auto 1.5rem;
@@ -184,35 +137,26 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.85rem 2.2rem;
-  background: linear-gradient(135deg, var(--primary), #574fd6);
-  color: #fff;
-  font-size: 1.05rem;
-  font-weight: 700;
+  padding: 0.8rem 2rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 1rem;
+  font-weight: 600;
   border-radius: 999px;
   text-decoration: none;
-  box-shadow: 0 8px 32px rgba(108, 99, 255, 0.45);
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid var(--primary-hover);
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
   position: relative;
   overflow: hidden;
 }
-.cta-btn::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transition: 0.5s;
-}
 .cta-btn:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 12px 40px rgba(108, 99, 255, 0.65);
-}
-.cta-btn:hover::before {
-  left: 100%;
+  background: var(--primary-hover);
+  border-color: var(--primary-active);
+  box-shadow: var(--shadow-md);
 }
 .cta-btn:active {
-  transform: translateY(-1px) scale(0.99);
+  transform: translateY(1px);
 }
 .cta-icon {
   transition: transform 0.2s ease;
@@ -233,19 +177,17 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.45rem 0.9rem;
-  background: rgba(26, 29, 39, 0.7);
+  padding: 0.4rem 0.85rem;
+  background: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   font-size: 0.82rem;
-  color: var(--text-muted);
-  backdrop-filter: blur(6px);
-  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  color: var(--text-secondary);
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 .pill:hover {
-  border-color: rgba(108, 99, 255, 0.4);
-  color: var(--text);
-  transform: translateY(-2px);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
 }
 .pill-icon {
   font-size: 0.95rem;
@@ -261,9 +203,9 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border);
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 @media (max-width: 600px) {
   .hero-footer {
@@ -273,19 +215,19 @@
   }
 }
 .footer-stat strong {
-  color: var(--text);
+  color: var(--text-primary);
 }
 .sdg-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   padding: 0.3rem 0.75rem;
-  background: rgba(0, 201, 167, 0.08);
-  border: 1px solid rgba(0, 201, 167, 0.2);
-  border-radius: 8px;
-  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
 }
 .sdg-tag strong {
-  color: var(--accent);
+  color: var(--text-primary);
 }
 </style>

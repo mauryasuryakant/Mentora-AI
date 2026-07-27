@@ -155,11 +155,11 @@ function barClass(pct) {
 <style scoped>
 .summary-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; align-items: stretch; }
 @media (max-width: 750px) { .summary-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 450px) { .summary-row { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 450px) { .summary-row { grid-template-columns: repeat(1, minmax(0, 1fr)); } }
 .summary-card { 
   text-align: center; 
   padding: 1.5rem 1rem;
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
   position: relative;
   overflow: hidden;
   margin: 0 !important;
@@ -169,29 +169,22 @@ function barClass(pct) {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-.summary-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--grad-primary);
-  opacity: 0.7;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 .summary-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 15px rgba(108,99,255,0.15);
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
 }
 .s-num { 
   font-size: 2.2rem; 
   font-weight: 800; 
-  background: var(--grad-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-primary);
   display: inline-block;
   line-height: 1.1;
 }
-.s-label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-top: 0.35rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.s-label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.35rem; text-transform: uppercase; letter-spacing: 0.04em; }
 
 /* CSS Bar Chart */
 .bar-chart {
@@ -207,24 +200,23 @@ function barClass(pct) {
 .bar-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; min-width: 36px; height: 100%; justify-content: flex-end; }
 .bar-fill { 
   width: 100%; 
-  border-radius: 6px 6px 0 0; 
+  border-radius: 4px 4px 0 0; 
   min-height: 4px; 
-  transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s; 
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease; 
 }
-.bar-item:hover .bar-fill { filter: brightness(1.2); box-shadow: 0 0 16px rgba(108,99,255,0.5); }
-.bar-success { background: linear-gradient(180deg, #00e5bc 0%, var(--success) 100%); }
-.bar-warning { background: linear-gradient(180deg, #ffd666 0%, var(--warning) 100%); }
-.bar-danger  { background: linear-gradient(180deg, #ff8599 0%, var(--danger) 100%); }
-.bar-label   { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
+.bar-item:hover .bar-fill { opacity: 0.85; }
+.bar-success { background: var(--success); }
+.bar-warning { background: var(--warning); }
+.bar-danger  { background: var(--danger); }
+.bar-label   { font-size: 0.72rem; color: var(--text-secondary); font-weight: 500; }
 
 /* Table */
 .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.history-table { width: 100%; min-width: 500px; border-collapse: separate; border-spacing: 0; font-size: 0.92rem; }
-.history-table th { text-align: left; color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 0.75rem 0.8rem; border-bottom: 2px solid var(--border); }
-.history-table td { padding: 0.85rem 0.8rem; border-bottom: 1px solid var(--border); transition: background 0.15s; }
-.history-table tr:hover td { background: rgba(255,255,255,0.03); }
+.history-table { width: 100%; min-width: 500px; border-collapse: separate; border-spacing: 0; font-size: 0.9rem; }
+.history-table th { text-align: left; color: var(--text-secondary); font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; padding: 0.75rem 0.8rem; border-bottom: 1px solid var(--border-strong); background: var(--surface); }
+.history-table td { padding: 0.8rem; border-bottom: 1px solid var(--border); transition: background-color 0.15s ease; color: var(--text-primary); }
+.history-table tr:hover td { background: var(--surface-hover); }
 .history-table tr:last-child td { border-bottom: none; }
 
-.tag-list { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 </style>

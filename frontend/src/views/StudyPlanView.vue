@@ -101,89 +101,87 @@ function isToday(dayNum) {
 .day-card { 
   margin: 0 !important;
   width: 100%;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
   position: relative;
   overflow: hidden;
   border-left: 3px solid transparent;
+  background: var(--surface-elevated);
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 .day-card:hover { 
-  transform: translateX(4px) translateY(-2px); 
-  border-color: rgba(255,255,255,0.18);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
 }
 .day-card.day-today { 
   border-left-color: var(--primary); 
-  background: linear-gradient(90deg, rgba(108,99,255,0.1) 0%, rgba(26,29,39,0.75) 100%);
-  box-shadow: 0 0 24px rgba(108,99,255,0.15);
+  background: var(--surface-elevated);
 }
 .day-card.day-done { 
-  opacity: 0.65; 
+  opacity: 0.7; 
   border-left-color: var(--success);
 }
-.day-card.day-done:hover { opacity: 0.9; }
+.day-card.day-done:hover { opacity: 0.95; }
 
 .day-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
 .day-meta   { display: flex; align-items: center; gap: 0.75rem; }
 .day-num    { 
-  font-weight: 800; 
+  font-weight: 700; 
   font-size: 1.1rem; 
-  background: var(--grad-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-primary);
 }
-.day-date   { font-size: 0.82rem; font-weight: 600; }
-.day-goal   { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5; }
+.day-date   { font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); }
+.day-goal   { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5; }
 
 /* Topic list with resource buttons */
 .topic-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 .topic-item {
   display: inline-flex;
   align-items: center;
   gap: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 1px solid rgba(108,99,255,0.3);
-  background: rgba(108,99,255,0.08);
-  transition: all 0.2s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: border-color 0.15s ease;
 }
 .topic-item:hover {
-  border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(108,99,255,0.3);
-  transform: translateY(-1px);
+  border-color: var(--border-hover);
 }
 .topic-tag {
-  color: #fff;
-  padding: 0.3rem 0.75rem;
-  font-size: 0.85rem;
-  font-weight: 600;
+  color: var(--text-primary);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 500;
 }
 .topic-learn-btn {
-  background: rgba(108,99,255,0.2);
+  background: var(--surface-hover);
   border: none;
-  border-left: 1px solid rgba(108,99,255,0.3);
-  color: #c3bdff;
-  padding: 0.45rem 0.85rem;
-  min-height: 36px;
+  border-left: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 0.4rem 0.85rem;
+  min-height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, color 0.15s ease;
   font-family: inherit;
   white-space: nowrap;
   touch-action: manipulation;
 }
 .topic-learn-btn:hover {
-  background: var(--primary);
-  color: #fff;
+  background: var(--primary-subtle);
+  color: var(--primary-lt);
 }
 
 .day-action { margin-top: 0.75rem; }

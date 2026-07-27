@@ -111,74 +111,69 @@ provide('openAiChat', openChat)
 
 .hamburger-btn {
   display: none;
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
-  min-height: 42px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  color: #fff;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 .hamburger-icon {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   line-height: 1;
 }
 .hamburger-btn:hover, .hamburger-btn:active {
-  background: rgba(108, 99, 255, 0.25);
-  border-color: var(--primary);
-  transform: scale(1.05);
+  background: var(--surface-hover);
+  border-color: var(--border-hover);
 }
 
 .mobile-menu {
   display: flex;
   flex-direction: column;
-  background: rgba(20, 23, 33, 0.96);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-elevated);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   padding: 0.85rem 1rem 1.15rem;
   gap: 0.5rem;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  box-shadow: var(--shadow-lg);
 }
 .mobile-menu a {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.85rem 1.25rem;
-  min-height: 48px;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid transparent;
-  transition: all 0.2s;
+  padding: 0.75rem 1rem;
+  min-height: 44px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: background-color 0.15s ease, color 0.15s ease;
   text-decoration: none;
   touch-action: manipulation;
 }
 .mobile-menu a:hover, .mobile-menu a:active {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateX(4px);
+  color: var(--text-primary);
+  background: var(--surface-hover);
 }
 .mobile-menu a.router-link-exact-active {
-  background: var(--grad-primary);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.35);
+  background: var(--surface-active);
+  color: var(--text-primary);
+  border-color: var(--primary-border);
+  font-weight: 600;
 }
 
 .slide-down-enter-active, .slide-down-leave-active {
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: max-height 0.2s ease, opacity 0.2s ease;
   max-height: 320px;
   opacity: 1;
   overflow: hidden;
@@ -193,36 +188,35 @@ provide('openAiChat', openChat)
 .nav-ai-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.4rem 1rem;
-  min-height: 40px;
-  background: linear-gradient(135deg, var(--primary), #8b82ff);
-  color: #fff;
-  border: none;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  min-height: 36px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: 1px solid var(--primary-hover);
   border-radius: 999px;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  letter-spacing: 0.03em;
-  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-  box-shadow: 0 2px 12px rgba(108,99,255,0.35);
+  letter-spacing: 0.01em;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  box-shadow: var(--shadow-sm);
   position: relative;
   flex-shrink: 0;
   touch-action: manipulation;
 }
 .nav-ai-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(108,99,255,0.5);
+  background: var(--primary-hover);
+  border-color: var(--primary-active);
 }
 .nav-ai-dot {
-  width: 7px; height: 7px;
-  background: var(--accent);
+  width: 6px; height: 6px;
+  background: #a5b4fc;
   border-radius: 50%;
   animation: pulse-dot 2s ease-in-out infinite;
 }
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.75); }
+  50%       { opacity: 0.4; transform: scale(0.8); }
 }
 </style>
